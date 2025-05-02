@@ -22,6 +22,16 @@
 
 --]]
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = '*',
+  callback = function()
+    vim.opt_local.expandtab = false
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.softtabstop = 4
+  end,
+})
+
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -99,10 +109,6 @@ vim.opt.scrolloff = 10
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 
-vim.opt.expandtab = false -- Don't convert tabs to spaces
-vim.opt.tabstop = 4 -- Number of spaces a tab visually represents
-vim.opt.shiftwidth = 4 -- Number of spaces used for autoindent
-vim.opt.softtabstop = 4 -- Number of spaces used when pressing <Tab>
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -181,7 +187,7 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  --'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -770,7 +776,9 @@ require('lazy').setup({
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
         preset = 'default',
-
+        ['<Tab>'] = { 'select_next', 'fallback' },
+        ['<S-Tab>'] = { 'select_prev', 'fallback' },
+        ['<Enter>'] = { 'select_and_accept', 'fallback' },
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
       },
@@ -956,6 +964,16 @@ require('lazy').setup({
     },
   },
 })
+
+--require('lspconfig').pylsp.setup {
+--  settings = {
+--    pylsp = {
+--      plugins = {
+--        pycodestyle = { enabled = false }, -- Disable pycodestyle linter
+--      },
+--    },
+--  },
+--}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
